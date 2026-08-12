@@ -1,0 +1,296 @@
+import type {
+  CookerId,
+  CustomerDef,
+  GeneratorDef,
+  ItemDef,
+  OrderDef,
+  RecipeDef,
+  ShopUpgradeDef,
+} from "./types";
+
+const chain = (
+  chainId: string,
+  names: string[],
+  icons: string[],
+  colors: string[],
+): ItemDef[] =>
+  names.map((name, index) => ({
+    id: `${chainId}_${index + 1}`,
+    chain: chainId,
+    level: index + 1,
+    name,
+    icon: icons[index],
+    color: colors[index],
+    next: index < names.length - 1 ? `${chainId}_${index + 2}` : undefined,
+    sell: 2 + index * 4,
+  }));
+
+export const items: ItemDef[] = [
+  ...chain(
+    "greens",
+    ["菜叶", "小青菜", "鲜青菜", "菜心", "精品菜心"],
+    ["leaf", "sprout", "greens", "bok", "jade"],
+    ["#c7e8a6", "#9fdc78", "#75c45d", "#4aa956", "#25834b"],
+  ),
+  ...chain(
+    "tomato",
+    ["小番茄", "红番茄", "甜番茄", "番茄篮", "精品番茄篮"],
+    ["dot", "tomato", "sweet", "tomato_basket", "tomato_crate"],
+    ["#ffd0c7", "#ff9b8d", "#f76f66", "#e95652", "#c83f46"],
+  ),
+  ...chain(
+    "egg",
+    ["鸡蛋", "双黄蛋", "蛋篮", "鲜蛋盒", "精品蛋盒"],
+    ["egg", "double", "basket", "box", "goldbox"],
+    ["#fff0bc", "#ffe08a", "#f7c96c", "#dfad4f", "#bd8f36"],
+  ),
+  ...chain(
+    "wheat",
+    ["小麦", "面粉", "面团", "发酵面团", "精品面团"],
+    ["wheat", "flour", "dough", "rise", "soft"],
+    ["#f6dda3", "#e9c87b", "#dcb163", "#c8954b", "#a87939"],
+  ),
+  ...chain(
+    "daisy",
+    ["花芽", "小雏菊", "雏菊束", "雏菊花篮", "精品雏菊篮"],
+    ["bud", "daisy", "bunch", "florist", "goldflower"],
+    ["#fff3a9", "#f9e779", "#e6d24f", "#cfba34", "#ab9824"],
+  ),
+  ...chain(
+    "rose",
+    ["玫瑰苗", "玫瑰", "玫瑰束", "玫瑰花盒", "精品玫瑰礼盒"],
+    ["rosebud", "rose", "roses", "rosebox", "royal"],
+    ["#ffd1df", "#ff9fbc", "#f06e9b", "#d84f83", "#b7336b"],
+  ),
+  ...chain(
+    "box",
+    ["纸片", "纸盒", "礼盒", "精致礼盒", "高级礼盒"],
+    ["paper", "box", "gift", "ribbonbox", "luxury"],
+    ["#f6ead5", "#e7d4b2", "#d3b485", "#b88d5d", "#926b45"],
+  ),
+  ...chain(
+    "ribbon",
+    ["细绳", "丝带", "蝴蝶结", "花结", "高级花结"],
+    ["line", "ribbon", "bow", "flowerbow", "silk"],
+    ["#d6f0ff", "#9edbf5", "#67c3e7", "#3da7cc", "#2389ac"],
+  ),
+  { id: "dish_bao", chain: "dish", level: 1, name: "青菜包", icon: "bao", color: "#f3f0d3", sell: 40 },
+  { id: "dish_egg", chain: "dish", level: 1, name: "番茄煎蛋", icon: "panegg", color: "#ffbd63", sell: 48 },
+  { id: "dish_pancake", chain: "dish", level: 1, name: "香草蛋饼", icon: "pancake", color: "#d2c77a", sell: 56 },
+  { id: "gift_morning", chain: "gift", level: 1, name: "清晨花礼", icon: "morninggift", color: "#f6de7c", sell: 70 },
+  { id: "gift_lunch", chain: "gift", level: 1, name: "暖心便当", icon: "bento", color: "#f3a76d", sell: 74 },
+  { id: "gift_rose", chain: "gift", level: 1, name: "玫瑰甜点盒", icon: "rosegift", color: "#ef8baa", sell: 92 },
+];
+
+export const itemById = Object.fromEntries(items.map((item) => [item.id, item])) as Record<string, ItemDef>;
+
+export const generators: GeneratorDef[] = [
+  {
+    id: "veg_basket",
+    name: "菜篮",
+    icon: "veg",
+    color: "#79bf68",
+    drops: ["greens_1", "tomato_1", "egg_1", "wheat_1"],
+    maxCharges: 20,
+    cooldownMs: 5 * 60 * 1000,
+  },
+  {
+    id: "flower_basket",
+    name: "花篮",
+    icon: "flower",
+    color: "#df8fab",
+    drops: ["daisy_1", "rose_1"],
+    maxCharges: 16,
+    cooldownMs: 5 * 60 * 1000,
+  },
+  {
+    id: "market_crate",
+    name: "杂货箱",
+    icon: "crate",
+    color: "#b98a5e",
+    drops: ["box_1", "ribbon_1", "box_1"],
+    maxCharges: 14,
+    cooldownMs: 6 * 60 * 1000,
+  },
+];
+
+export const cookerNames: Record<CookerId, string> = {
+  steamer: "蒸锅",
+  pan: "煎台",
+  gift_table: "礼盒台",
+};
+
+export const recipes: RecipeDef[] = [
+  {
+    id: "recipe_bao",
+    name: "青菜包",
+    cooker: "steamer",
+    icon: "bao",
+    color: "#ece5bc",
+    inputs: ["wheat_3", "greens_3"],
+    output: "dish_bao",
+    durationMs: 90 * 1000,
+  },
+  {
+    id: "recipe_egg",
+    name: "番茄煎蛋",
+    cooker: "pan",
+    icon: "panegg",
+    color: "#ffbd63",
+    inputs: ["egg_2", "tomato_2"],
+    output: "dish_egg",
+    durationMs: 120 * 1000,
+  },
+  {
+    id: "recipe_pancake",
+    name: "香草蛋饼",
+    cooker: "pan",
+    icon: "pancake",
+    color: "#d2c77a",
+    inputs: ["egg_3", "daisy_2"],
+    output: "dish_pancake",
+    durationMs: 150 * 1000,
+  },
+  {
+    id: "recipe_morning_gift",
+    name: "清晨花礼",
+    cooker: "gift_table",
+    icon: "morninggift",
+    color: "#f6de7c",
+    inputs: ["daisy_3", "box_2", "ribbon_1"],
+    output: "gift_morning",
+    durationMs: 180 * 1000,
+  },
+  {
+    id: "recipe_lunch",
+    name: "暖心便当",
+    cooker: "gift_table",
+    icon: "bento",
+    color: "#f3a76d",
+    inputs: ["greens_3", "egg_3", "box_2"],
+    output: "gift_lunch",
+    durationMs: 210 * 1000,
+  },
+  {
+    id: "recipe_rose_gift",
+    name: "玫瑰甜点盒",
+    cooker: "gift_table",
+    icon: "rosegift",
+    color: "#ef8baa",
+    inputs: ["rose_3", "wheat_3", "box_3"],
+    output: "gift_rose",
+    durationMs: 240 * 1000,
+  },
+];
+
+export const customers: CustomerDef[] = [
+  {
+    id: "lin",
+    name: "林阿姨",
+    avatar: "neighbor",
+    role: "老街邻居",
+    color: "#e6a768",
+    story: ["这家小铺以前一到清晨就有蒸汽。", "你做的青菜包，味道有点像从前。", "门头亮起来了，巷子也像醒了一点。"],
+  },
+  {
+    id: "xiaoman",
+    name: "小满",
+    avatar: "student",
+    role: "放学路过的小学生",
+    color: "#7eb6d9",
+    story: ["我想给妈妈带一份好看的小礼物。", "她今天加班，我想让她开心一下。", "妈妈说，下次也想来店里坐坐。"],
+  },
+  {
+    id: "acheng",
+    name: "阿诚",
+    avatar: "coder",
+    role: "加班程序员",
+    color: "#6b8fbc",
+    story: ["今晚又要赶需求，能做点热的吗？", "番茄煎蛋救了我半条命。", "我给你写了个自动算账小工具，别嫌简陋。"],
+  },
+  {
+    id: "shen",
+    name: "沈爷爷",
+    avatar: "gardener",
+    role: "退休花匠",
+    color: "#83a46a",
+    story: ["花架空着可惜，我带了些旧花盆。", "花要慢慢养，人也是。", "这条巷子终于又有香气了。"],
+  },
+  {
+    id: "qiao",
+    name: "乔小姐",
+    avatar: "planner",
+    role: "婚礼策划师",
+    color: "#cc779b",
+    story: ["我需要一份不浮夸但很用心的花礼。", "新娘说它像清晨的第一束光。", "下个月，我想把你的小铺写进推荐名单。"],
+  },
+  {
+    id: "zhou",
+    name: "老周",
+    avatar: "courier",
+    role: "快递站老板",
+    color: "#b48358",
+    story: ["快递站人多，大家总忘记吃饭。", "你的便当一到，屋里都安静了。", "以后巷口的午饭，就拜托你了。"],
+  },
+];
+
+export const orders: OrderDef[] = [
+  { id: "order_001", title: "街坊早餐", customerId: "lin", story: false, needs: ["greens_2", "egg_2"], coin: 80, xp: 10, storyPoints: 0 },
+  { id: "order_002", title: "清爽菜篮", customerId: "shen", story: false, needs: ["greens_3", "tomato_2"], coin: 105, xp: 12, storyPoints: 0 },
+  { id: "order_003", title: "放学点心", customerId: "xiaoman", story: false, needs: ["wheat_2", "daisy_2"], coin: 120, xp: 14, storyPoints: 0 },
+  { id: "order_004", title: "加班夜宵", customerId: "acheng", story: false, needs: ["dish_egg"], coin: 180, xp: 18, storyPoints: 0 },
+  { id: "order_005", title: "旧花盆整理", customerId: "shen", story: false, needs: ["daisy_3", "box_2"], coin: 150, xp: 16, storyPoints: 0 },
+  { id: "order_006", title: "伴手礼试做", customerId: "qiao", story: false, needs: ["box_3", "ribbon_2"], coin: 155, xp: 16, storyPoints: 0 },
+  { id: "order_007", title: "热腾腾包子", customerId: "lin", story: true, needs: ["dish_bao"], coin: 230, xp: 22, storyPoints: 1 },
+  { id: "order_008", title: "给妈妈的花", customerId: "xiaoman", story: true, needs: ["gift_morning"], coin: 260, xp: 24, storyPoints: 1 },
+  { id: "order_009", title: "程序员续命餐", customerId: "acheng", story: true, needs: ["dish_egg", "tomato_3"], coin: 280, xp: 25, storyPoints: 1 },
+  { id: "order_010", title: "花架重开", customerId: "shen", story: true, needs: ["daisy_3", "rose_2"], coin: 240, xp: 24, storyPoints: 1 },
+  { id: "order_011", title: "婚礼清晨花礼", customerId: "qiao", story: true, needs: ["gift_morning", "rose_3"], coin: 340, xp: 32, storyPoints: 2 },
+  { id: "order_012", title: "快递站午饭", customerId: "zhou", story: true, needs: ["gift_lunch"], coin: 360, xp: 34, storyPoints: 2 },
+  { id: "order_013", title: "精致礼盒单", customerId: "qiao", story: false, needs: ["gift_rose"], coin: 420, xp: 38, storyPoints: 0 },
+  { id: "order_014", title: "巷口大份餐", customerId: "zhou", story: false, needs: ["dish_bao", "dish_pancake"], coin: 390, xp: 35, storyPoints: 0 },
+];
+
+export const orderById = Object.fromEntries(orders.map((order) => [order.id, order])) as Record<string, OrderDef>;
+export const recipeById = Object.fromEntries(recipes.map((recipe) => [recipe.id, recipe])) as Record<string, RecipeDef>;
+export const generatorById = Object.fromEntries(generators.map((generator) => [generator.id, generator])) as Record<string, GeneratorDef>;
+export const customerById = Object.fromEntries(customers.map((customer) => [customer.id, customer])) as Record<string, CustomerDef>;
+
+export const shopUpgrades: ShopUpgradeDef[] = [
+  {
+    id: "signboard",
+    name: "门头",
+    levels: [
+      { level: 1, title: "褪色木牌", coinCost: 0, storyCost: 0, effect: "小店刚刚重开" },
+      { level: 2, title: "新刷招牌", coinCost: 300, storyCost: 0, effect: "门口更醒目，街坊更容易找到小店" },
+      { level: 3, title: "暖灯门头", coinCost: 800, storyCost: 2, effect: "夜里也亮着暖灯，小店更有开张感" },
+    ],
+  },
+  {
+    id: "tables",
+    name: "餐桌",
+    levels: [
+      { level: 1, title: "旧木桌", coinCost: 0, storyCost: 0, effect: "能接待路过街坊" },
+      { level: 2, title: "干净小桌", coinCost: 280, storyCost: 0, effect: "桌面清爽，顾客坐下更安心" },
+      { level: 3, title: "靠窗花桌", coinCost: 760, storyCost: 2, effect: "窗边有花，小店更有停留感" },
+    ],
+  },
+  {
+    id: "flower_shelf",
+    name: "花架",
+    levels: [
+      { level: 1, title: "空花架", coinCost: 0, storyCost: 0, effect: "等着重新摆满鲜花" },
+      { level: 2, title: "晨光花架", coinCost: 360, storyCost: 1, effect: "晨光下有了第一排花" },
+      { level: 3, title: "满架花香", coinCost: 900, storyCost: 3, effect: "花香铺满门口，路人会多看一眼" },
+    ],
+  },
+  {
+    id: "kitchen",
+    name: "后厨",
+    levels: [
+      { level: 1, title: "小灶台", coinCost: 0, storyCost: 0, effect: "能做基础热食" },
+      { level: 2, title: "整洁后厨", coinCost: 420, storyCost: 1, effect: "锅具和台面都收拾顺手了" },
+      { level: 3, title: "高效后厨", coinCost: 1000, storyCost: 3, effect: "动线更顺，看起来像完整小厨房" },
+    ],
+  },
+];

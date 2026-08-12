@@ -1,0 +1,23 @@
+{
+  "platform": "wechatgame",
+  "buildPath": "build",
+  "outputName": "wechatgame",
+  "name": "xiangkou-huashipu",
+  "debug": false,
+  "md5Cache": false,
+  "scenes": [
+    {
+      "url": "db://assets/scenes/Boot.scene",
+      "uuid": "bf0757ef-bb28-4dfa-a365-c03412b96bc4"
+    }
+  ],
+  "startScene": "bf0757ef-bb28-4dfa-a365-c03412b96bc4",
+  "packages": {
+    "wechatgame": {
+      "appid": "touristappid",
+      "orientation": "portrait",
+      "separateEngine": false,
+      "wasm": "wasm"
+    }
+  }
+}

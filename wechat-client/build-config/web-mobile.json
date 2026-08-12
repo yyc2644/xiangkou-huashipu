@@ -1,0 +1,22 @@
+{
+  "platform": "web-mobile",
+  "buildPath": "build",
+  "outputName": "web-mobile",
+  "name": "xiangkou-huashipu",
+  "debug": true,
+  "md5Cache": false,
+  "scenes": [
+    {
+      "url": "db://assets/scenes/Boot.scene",
+      "uuid": "bf0757ef-bb28-4dfa-a365-c03412b96bc4"
+    }
+  ],
+  "startScene": "bf0757ef-bb28-4dfa-a365-c03412b96bc4",
+  "packages": {
+    "web-mobile": {
+      "orientation": "portrait",
+      "useWebGPU": false,
+      "embedWebDebugger": false
+    }
+  }
+}
