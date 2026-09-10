@@ -11,6 +11,7 @@
     "requirements": "node scripts/check-requirements.mjs",
     "loop": "node scripts/check-gameplay-loop.mjs",
     "autoplay": "node scripts/check-autoplay.mjs",
+    "domain:parity": "node scripts/check-domain-parity.mjs",
     "ui:mobile": "playwright test",
     "ui:cocos": "playwright test -c playwright.cocos.config.ts",
     "wechat:build:web": "node scripts/build-cocos.mjs web-mobile",
@@ -25,7 +26,8 @@
     "wechat:cloud": "node scripts/check-wechat-cloud.mjs",
     "wechat:ui": "node scripts/check-cocos-ui.mjs",
     "wechat:check": "node scripts/check-wechat-client.mjs",
-    "verify": "npm run build && npm run balance && npm run requirements && npm run loop && npm run autoplay && npm run ui:mobile && npm run ui:cocos && npm run wechat:domain && npm run wechat:autoplay && npm run wechat:cloud && npm run wechat:ui && npm run wechat:check"
+    "verify": "npm run build && npm run balance && npm run requirements && npm run loop && npm run autoplay && npm run domain:parity && npm run ui:mobile && npm run wechat:domain && npm run wechat:autoplay && npm run wechat:cloud && npm run wechat:ui",
+    "verify:local": "npm run verify && npm run wechat:build:web && npm run ui:cocos && npm run wechat:build && npm run wechat:check"
   },
   "dependencies": {
     "@vitejs/plugin-legacy": "^7.2.1",
