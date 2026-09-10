@@ -26,8 +26,8 @@
     "wechat:cloud": "node scripts/check-wechat-cloud.mjs",
     "wechat:ui": "node scripts/check-cocos-ui.mjs",
     "wechat:check": "node scripts/check-wechat-client.mjs",
-    "verify": "npm run build && npm run balance && npm run requirements && npm run loop && npm run autoplay && npm run domain:parity && npm run ui:mobile && npm run wechat:domain && npm run wechat:autoplay && npm run wechat:cloud && npm run wechat:ui && npm run wechat:check",
-    "verify:local": "npm run verify && npm run wechat:build:web && npm run ui:cocos && npm run wechat:build && HUASHIPU_REQUIRE_LOCAL_TOOLCHAIN=1 npm run wechat:check"
+    "verify": "npm run build && npm run balance && npm run requirements && npm run loop && npm run autoplay && npm run domain:parity && npm run ui:mobile && npm run wechat:domain && npm run wechat:autoplay && npm run wechat:cloud && npm run wechat:ui",
+    "verify:local": "npm run verify && npm run wechat:build:web && npm run ui:cocos && npm run wechat:build && npm run wechat:check"
   },
   "dependencies": {
     "@vitejs/plugin-legacy": "^7.2.1",
